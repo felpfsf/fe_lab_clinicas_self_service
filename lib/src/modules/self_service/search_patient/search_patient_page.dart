@@ -1,7 +1,11 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:fe_lab_clinicas_core/fe_lab_clinicas_core.dart';
+import 'package:fe_lab_clinicas_self_service_cb/src/modules/self_service/search_patient/search_patient_controller.dart';
 import 'package:fe_lab_clinicas_self_service_cb/src/modules/self_service/self_service_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_getit/flutter_getit.dart';
+import 'package:signals_flutter/signals_flutter.dart';
 import 'package:validatorless/validatorless.dart';
 
 class SearchPatientPage extends StatefulWidget {
@@ -11,16 +15,36 @@ class SearchPatientPage extends StatefulWidget {
   State<SearchPatientPage> createState() => _SearchPatientPageState();
 }
 
-class _SearchPatientPageState extends State<SearchPatientPage> {
+class _SearchPatientPageState extends State<SearchPatientPage>
+    with MessageViewMixin {
   final formKey = GlobalKey<FormState>();
   final documentEC = TextEditingController();
+  final controller = Injector.get<SearchPatientController>();
 
   void handleSubmit() {
     final valid = formKey.currentState?.validate() ?? false;
 
     if (valid) {
-      debugPrint('Submiting => ${documentEC.text}');
+      controller.searchPatientByDocument(documentEC.text);
     }
+  }
+
+  void handleSubmitWithoutDocument() {
+    controller.continueWithoutDocument();
+  }
+
+  @override
+  void initState() {
+    messageListener(controller);
+    effect(() {
+      final SearchPatientController(:patient, :patientNotFound) = controller;
+
+      if (patient != null || patientNotFound != null) {
+        // selfServiceController para redirecionar.
+        Injector.get<SelfServiceController>().goToFormPatient(patient);
+      }
+    });
+    super.initState();
   }
 
   @override
@@ -45,6 +69,9 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                   child: Text('Reiniciar Processo'),
                 ),
               ];
+            },
+            onSelected: (value) {
+              Injector.get<SelfServiceController>().restartProcess();
             },
           ),
         ],
@@ -86,6 +113,10 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                         const SizedBox(height: 48),
                         TextFormField(
                           controller: documentEC,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CpfInputFormatter(),
+                          ],
                           validator: Validatorless.required('CPF obrigatório'),
                           decoration: const InputDecoration(
                             label: Text('Digite CPF do Paciente'),
@@ -102,7 +133,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: handleSubmitWithoutDocument,
                               child: const Text(
                                 'Clique aqui',
                                 style: TextStyle(

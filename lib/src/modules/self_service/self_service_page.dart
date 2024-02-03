@@ -39,6 +39,9 @@ class _SelfServicePageState extends State<SelfServicePage>
           case FormSteps.done:
             baseRoute += 'done';
           case FormSteps.restart:
+            // Ao reiniciar o processo ele limpa toda a pilha de rota e seta uma nova
+            Navigator.of(context).popUntil(ModalRoute.withName('/service'));
+            controller.startProcess();
             return;
         }
         // Com base nos enums da controller foi feito o switch acima,
