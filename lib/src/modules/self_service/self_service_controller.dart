@@ -41,8 +41,6 @@ class SelfServiceController with MessageStateMixin {
 
   void goToFormPatient(PatientModel? patient) {
     _model = _model.copyWith(patient: () => patient);
-    print(
-        "🚀 ~ SelfServiceController ~ goToFormPatient ~ model ~ ${_model.patient?.name}");
     _step.forceUpdate(FormSteps.patient);
   }
 

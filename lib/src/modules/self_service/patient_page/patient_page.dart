@@ -41,6 +41,7 @@ class _PatientPageState extends State<PatientPage>
   @override
   void initState() {
     messageListener(controller);
+
     final SelfServiceModel(:patient) = selfServiceController.model;
 
     patientFound = patient != null;
@@ -50,8 +51,7 @@ class _PatientPageState extends State<PatientPage>
 
     effect(() {
       if (controller.nextStep) {
-        selfServiceController
-            .updatePatientAndGoDocument(controller.patient);
+        selfServiceController.updatePatientAndGoDocument(controller.patient);
       }
     });
     super.initState();
@@ -321,7 +321,11 @@ class _PatientPageState extends State<PatientPage>
                               child: SizedBox(
                                 height: 48,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    controller.patient =
+                                        selfServiceController.model.patient;
+                                    controller.goNextStep();
+                                  },
                                   child: const Text('CONTINUAR'),
                                 ),
                               ),

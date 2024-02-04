@@ -8,19 +8,18 @@ class PatientController with MessageStateMixin {
     required PatientRepository repository,
   }) : _repository = repository;
 
-  final PatientRepository _repository;
-
   PatientModel? patient;
+  final PatientRepository _repository;
   final _nextStep = signal<bool>(false);
 
   bool get nextStep => _nextStep();
-
+  
   void goNextStep() {
     _nextStep.value = true;
   }
 
-  void updateAndNext(PatientModel model) {
-    final updateResult = _repository.update(model);
+  void updateAndNext(PatientModel model) async {
+    final updateResult = await _repository.update(model);
 
     switch (updateResult) {
       case Left():
