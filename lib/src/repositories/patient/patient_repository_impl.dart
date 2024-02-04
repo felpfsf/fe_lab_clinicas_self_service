@@ -31,4 +31,15 @@ class PatientRepositoryImpl implements PatientRepository {
       return Left(RepositoryException());
     }
   }
+
+  @override
+  Future<Either<RepositoryException, Unit>> update(PatientModel patient) async {
+    try {
+      await restClient.put('/patients/${patient.id}', data: patient.toJson());
+      return Right(unit);
+    } on DioException catch (e, s) {
+      log('Erro ao atualizar paciente', error: e, stackTrace: s);
+      return Left(RepositoryException());
+    }
+  }
 }
