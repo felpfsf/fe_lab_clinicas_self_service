@@ -29,12 +29,23 @@ class _PatientPageState extends State<PatientPage>
   late bool enableForm;
 
   void handleUpdate() {
-    final valid = formKey.currentState?.validate() ?? false;
+    controller.updateAndNext(
+      updatePatient(selfServiceController.model.patient!),
+    );
+  }
 
+  void handleRegister() {
+    controller.saveAndNext(createPatient());
+  }
+
+  void handleSubmit() {
+    final valid = formKey.currentState?.validate() ?? false;
     if (valid) {
-      controller.updateAndNext(
-        updatePatient(selfServiceController.model.patient!),
-      );
+      if (patientFound) {
+        handleUpdate();
+      } else {
+        handleRegister();
+      }
     }
   }
 
@@ -293,7 +304,7 @@ class _PatientPageState extends State<PatientPage>
                           width: double.infinity,
                           height: 48,
                           child: ElevatedButton(
-                            onPressed: handleUpdate,
+                            onPressed: handleSubmit,
                             child: Visibility(
                               visible: !patientFound,
                               replacement: const Text('SALVAR E CONTINUAR'),
