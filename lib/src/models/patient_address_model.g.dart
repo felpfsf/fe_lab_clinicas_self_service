@@ -11,7 +11,7 @@ PatientAddressModel _$PatientAddressModelFromJson(Map<String, dynamic> json) =>
       cep: json['cep'] as String,
       streetAddress: json['street_address'] as String,
       number: json['number'] as String,
-      addressComplement: json['address_complement'] as String,
+      addressComplement: json['address_complement'] as String? ?? '',
       state: json['state'] as String,
       city: json['city'] as String,
       district: json['district'] as String,
