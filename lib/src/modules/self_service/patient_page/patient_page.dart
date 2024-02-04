@@ -22,7 +22,7 @@ class _PatientPageState extends State<PatientPage>
     with PatientFormController, MessageViewMixin {
   final formKey = GlobalKey<FormState>();
   final selfServiceController = Injector.get<SelfServiceController>();
-  final patientController = Injector.get<PatientController>();
+  final controller = Injector.get<PatientController>();
 
   // Variáveis auxiliares de estado
   late bool patientFound;
@@ -32,7 +32,7 @@ class _PatientPageState extends State<PatientPage>
     final valid = formKey.currentState?.validate() ?? false;
 
     if (valid) {
-      patientController.updateAndNext(
+      controller.updateAndNext(
         updatePatient(selfServiceController.model.patient!),
       );
     }
@@ -40,15 +40,7 @@ class _PatientPageState extends State<PatientPage>
 
   @override
   void initState() {
-    effect(() {
-      if (patientController.nextStep) {
-        selfServiceController
-            .updatePatientAndGoDocument(patientController.patient);
-      }
-    });
-
-    messageListener(patientController);
-
+    messageListener(controller);
     final SelfServiceModel(:patient) = selfServiceController.model;
 
     patientFound = patient != null;
@@ -56,6 +48,12 @@ class _PatientPageState extends State<PatientPage>
 
     initializeForm(patient);
 
+    effect(() {
+      if (controller.nextStep) {
+        selfServiceController
+            .updatePatientAndGoDocument(controller.patient);
+      }
+    });
     super.initState();
   }
 

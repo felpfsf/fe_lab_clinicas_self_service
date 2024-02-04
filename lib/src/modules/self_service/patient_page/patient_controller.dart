@@ -6,9 +6,9 @@ import 'package:signals_flutter/signals_flutter.dart';
 class PatientController with MessageStateMixin {
   PatientController({
     required PatientRepository repository,
-  }) : _patientRepository = repository;
+  }) : _repository = repository;
 
-  final PatientRepository _patientRepository;
+  final PatientRepository _repository;
 
   PatientModel? patient;
   final _nextStep = signal<bool>(false);
@@ -20,7 +20,7 @@ class PatientController with MessageStateMixin {
   }
 
   void updateAndNext(PatientModel model) {
-    final updateResult = _patientRepository.update(model);
+    final updateResult = _repository.update(model);
 
     switch (updateResult) {
       case Left():

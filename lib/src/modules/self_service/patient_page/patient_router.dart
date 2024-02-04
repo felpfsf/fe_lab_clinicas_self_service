@@ -8,7 +8,7 @@ class PatientRouter extends FlutterGetItModulePageRouter {
 
   @override
   List<Bind<Object>> get bindings => [
-    Bind.lazySingleton((i) => PatientController(repository: i()))
+    Bind.lazySingleton((i) => PatientController(repository: i()),)
   ];
 
   @override
