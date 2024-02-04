@@ -20,6 +20,7 @@ class SelfServiceController with MessageStateMixin {
   var _model = const SelfServiceModel();
 
   FormSteps get step => _step();
+  SelfServiceModel get model => _model;
 
   void startProcess() {
     _step.forceUpdate(FormSteps.whoIAm);
