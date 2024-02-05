@@ -38,6 +38,16 @@ class _SelfServicePageState extends State<SelfServicePage>
             baseRoute += 'documents';
           case FormSteps.done:
             baseRoute += 'done';
+          // Método antigo
+          // Ao invés de apenas atualizar o step para done
+          // Precisamos redirecionar o usuário e passar a senha de atendimento
+          // para a tela de done;
+          // Navigator.of(context).pushNamedAndRemoveUntil(
+          //   '/service/done',
+          //   ModalRoute.withName('/service'),
+          //   arguments: controller.password,
+          // );
+          // return;
           case FormSteps.restart:
             // Ao reiniciar o processo ele limpa toda a pilha de rota e seta uma nova
             Navigator.of(context).popUntil(ModalRoute.withName('/service'));

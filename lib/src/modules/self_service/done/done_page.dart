@@ -1,12 +1,16 @@
 import 'package:fe_lab_clinicas_core/fe_lab_clinicas_core.dart';
+import 'package:fe_lab_clinicas_self_service_cb/src/modules/self_service/self_service_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_getit/flutter_getit.dart';
 
 class DonePage extends StatelessWidget {
-  const DonePage({super.key});
+  final selfServiceController = Injector.get<SelfServiceController>();
+  DonePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final sizeOf = MediaQuery.sizeOf(context);
+
     return Scaffold(
       appBar: LabClinicasAppbar(),
       body: SingleChildScrollView(
@@ -31,26 +35,31 @@ class DonePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Container(
-                  width: sizeOf.width * .4,
+                  constraints: const BoxConstraints(
+                    minWidth: 248,
+                    minHeight: 48,
+                  ),
                   padding:
-                      const EdgeInsets.symmetric(vertical: 9, horizontal: 60),
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   decoration: BoxDecoration(
                     color: LabClinicasTheme.primaryLabel,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Text(
-                    'BG5898',
+                  child: Text(
+                    selfServiceController.password,
                     style: LabClinicasTheme.titleSmallBoldStyle,
                     textAlign: TextAlign.center,
                   ),
                 ),
                 const SizedBox(height: 40),
-                const Text(
-                  'AGUARDE!',
-                  style: LabClinicasTheme.bodyBold18Style,
-                ),
-                const Text(
-                  'Sua senha será chamado no painel',
+                const Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: 'AGUARDE! \n'),
+                      TextSpan(text: 'Sua senha será chamado no painel'),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
                   style: LabClinicasTheme.bodyBold18Style,
                 ),
                 const SizedBox(height: 40),
@@ -88,7 +97,9 @@ class DonePage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: LabClinicasTheme.primaryLabel,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      selfServiceController.restartProcess();
+                    },
                     child: const Text('FINALIZAR'),
                   ),
                 ),
