@@ -31,7 +31,7 @@ class InformationFormRepositoryImpl implements InformationFormRepository {
         'patient_id': patientId,
         'health_insurance_card': healthInsurenceCardDoc,
         'medical_order': medicalOrdersDoc,
-        'password': '$name $lastName',
+        'password': '$name$lastName',
         'date_created': DateTime.now().toIso8601String(),
         'status': 'Waiting',
         'tests': [],

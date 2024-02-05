@@ -88,9 +88,9 @@ class SelfServiceController with MessageStateMixin {
       case Left():
         showError('Erro ao registrar atendimento');
       case Right():
-        password = '${_model.name} ${_model.lastName}';
+        password = '${_model.name}${_model.lastName}';
         _step.forceUpdate(FormSteps.done);
-        showSuccess('message');
+        showSuccess('Atendimento finalizado com sucesso');
     }
   }
 }
