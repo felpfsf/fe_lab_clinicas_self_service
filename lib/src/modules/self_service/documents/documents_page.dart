@@ -133,7 +133,9 @@ class _DocumentsPageState extends State<DocumentsPage> with MessageViewMixin {
                       const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/service/done');
+                          },
                           style: ElevatedButton.styleFrom(
                             fixedSize: const Size.fromHeight(48),
                             backgroundColor: LabClinicasTheme.primaryLabel,
