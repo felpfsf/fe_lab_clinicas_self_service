@@ -20,7 +20,7 @@ class _DocumentsPageState extends State<DocumentsPage> with MessageViewMixin {
     // Redireciona para a tela de scan do documento
     // A página vai retornar a url do documento qdo voltar
     final filePath =
-        await Navigator.of(context).pushNamed('/service/documents-scan');
+        await Navigator.of(context).pushNamed('/service/documents/scan');
     if (filePath != null && filePath != '') {
       selfServiceController.registerDocument(
         type,
