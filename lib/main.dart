@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:camera/camera.dart';
 import 'package:fe_lab_clinicas_core/fe_lab_clinicas_core.dart';
 import 'package:fe_lab_clinicas_self_service_cb/src/binding/lab_clinicas_application_binding.dart';
 import 'package:fe_lab_clinicas_self_service_cb/src/modules/auth/auth_module.dart';
@@ -10,11 +11,19 @@ import 'package:fe_lab_clinicas_self_service_cb/src/pages/splash_page/splash_pag
 import 'package:flutter/material.dart';
 import 'package:flutter_getit/flutter_getit.dart';
 
-void main() {
+late List<CameraDescription> _cameras;
+
+void main() async {
   // Criando uma zone de erros
-  runZonedGuarded(() => runApp(const LabClinicasSelfServiceApp()),
-      (error, stack) {
+  runZonedGuarded(() async {
+    // Inicializando o package de camera
+    WidgetsFlutterBinding.ensureInitialized();
+    _cameras = await availableCameras();
+
+    runApp(const LabClinicasSelfServiceApp());
+  }, (error, stack) {
     log("Erro não tratado", error: error, stackTrace: stack);
+    throw error;
   });
 }
 
@@ -37,6 +46,13 @@ class LabClinicasSelfServiceApp extends StatelessWidget {
         HomeModule(),
         SelfServiceModule(),
       ],
+      didStart: (){
+        // Recurso que é utilizado para registar as cameras
+        // ele é registrado globalmente através de uma key
+        FlutterGetItBindingRegister.registerPermanentBinding('CAMERAS', [
+          Bind.lazySingleton((i) => _cameras)
+        ]);
+      },
     );
   }
 }
