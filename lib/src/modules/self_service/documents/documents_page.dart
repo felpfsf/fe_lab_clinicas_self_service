@@ -115,6 +115,9 @@ class _DocumentsPageState extends State<DocumentsPage> with MessageViewMixin {
                         child: OutlinedButton(
                           onPressed: () {
                             selfServiceController.clearDocuments();
+                            // Ao remover atualiza a tela para que os estados
+                            // sejam atualizados
+                            setState(() {});
                           },
                           style: OutlinedButton.styleFrom(
                             fixedSize: const Size.fromHeight(48),
